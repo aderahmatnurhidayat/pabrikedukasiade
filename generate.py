@@ -1,19 +1,17 @@
 import os
-import requests
 from datetime import datetime
 import sys
+from groq import Groq
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-API_URL = "https://api.groq.com/openai/v1/chat/completions"
+# Mengambil API key dari environment GitHub Secrets
+api_key = os.environ.get("GROQ_API_KEY")
 
-if not GROQ_API_KEY:
-    print("ERROR: GROQ_API_KEY kosong! Cek kembali GitHub Secrets kamu.")
+if not api_key:
+    print("ERROR: GROQ_API_KEY kosong! Cek kembali GitHub Secrets Anda.")
     sys.exit(1)
 
-headers = {
-    "Authorization": f"Bearer {GROQ_API_KEY}",
-    "Content-Type": "application/json"
-}
+# Inisialisasi client resmi Groq
+client = Groq(api_key=api_key)
 
 prompt = """
 Kamu adalah seorang guru Matematika dan Informatika di MTs (setingkat SMP) yang sangat kreatif, ramah, dan asyik.
@@ -23,21 +21,19 @@ Bahasanya santai, memotivasi, mudah dipahami anak usia 13-15 tahun, dan tidak ka
 Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
-# Menggunakan model standar Groq yang stabil dan aktif
-payload = {
-    "model": "llama-3.1-8b-instant",
-    "messages": [
-        {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
-        {"role": "user", "content": prompt}
-    ],
-    "temperature": 0.8
-}
-
-response = requests.post(API_URL, json=payload, headers=headers)
-
-if response.status_code == 200:
-    result = response.json()
-    ai_content = result['choices'][0]['message']['content']
+try:
+    # Menggunakan model standar Groq yang paling diandalkan saat ini
+    completion = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.8,
+        max_tokens=1500
+    )
+    
+    ai_content = completion.choices[0].message.content
     
     today = datetime.now().strftime("%Y-%m-%d")
     filename = f"materi_{today}.md"
@@ -47,7 +43,7 @@ if response.status_code == 200:
         f.write(ai_content)
         
     print(f"Berhasil membuat materi: {filename}")
-else:
-    print(f"GAGAL menghubungi Groq API (Kode {response.status_code}):")
-    print(response.text)
+
+except Exception as e:
+    print(f"GAGAL terhubung ke Groq:", str(e))
     sys.exit(1)
