@@ -22,9 +22,9 @@ Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
 try:
-    # Menggunakan model standar Groq yang paling diandalkan saat ini
+    # Menggunakan model llama-3.1-8b-instant yang kompatibel dan terbuka untuk akun gratis
     completion = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="llama-3.1-8b-instant",
         messages=[
             {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
             {"role": "user", "content": prompt}
