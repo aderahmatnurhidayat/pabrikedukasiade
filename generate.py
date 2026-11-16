@@ -24,7 +24,7 @@ Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
 payload = {
-    "model": "llama3-8b-8192",
+    "model": "llama-3.1-8b-instant", # Menggunakan model Groq terbaru yang aktif
     "messages": [
         {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
         {"role": "user", "content": prompt}
