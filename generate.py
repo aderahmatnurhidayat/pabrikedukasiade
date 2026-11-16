@@ -23,8 +23,9 @@ Bahasanya santai, memotivasi, mudah dipahami anak usia 13-15 tahun, dan tidak ka
 Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
+# Menggunakan model standar Groq yang stabil dan aktif
 payload = {
-    "model": "gemma2-9b-it", # Model open-source Google yang sangat stabil di Groq
+    "model": "llama-3.1-8b-instant",
     "messages": [
         {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
         {"role": "user", "content": prompt}
