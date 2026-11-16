@@ -22,10 +22,10 @@ Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
 try:
-    # Menggunakan model Gemini paling stabil saat ini
+    # Menggunakan model standar yang paling stabil
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=prompt,
+        contents=prompt
     )
     
     ai_content = response.text
