@@ -24,7 +24,7 @@ Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
 payload = {
-    "model": "llama-3.3-70b-versatile", # Menggunakan model Groq aktif lainnya
+    "model": "gemma2-9b-it", # Model open-source Google yang sangat stabil di Groq
     "messages": [
         {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
         {"role": "user", "content": prompt}
