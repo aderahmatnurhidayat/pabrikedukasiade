@@ -1,17 +1,17 @@
 import os
 from datetime import datetime
 import sys
-from groq import Groq
+from google import genai
 
-# Mengambil API key dari environment GitHub Secrets
-api_key = os.environ.get("GROQ_API_KEY")
+# Mengambil API key Gemini dari environment GitHub Secrets
+api_key = os.environ.get("GEMINI_API_KEY")
 
 if not api_key:
-    print("ERROR: GROQ_API_KEY kosong! Cek kembali GitHub Secrets Anda.")
+    print("ERROR: GEMINI_API_KEY kosong! Cek kembali GitHub Secrets Anda.")
     sys.exit(1)
 
-# Inisialisasi client resmi Groq
-client = Groq(api_key=api_key)
+# Inisialisasi client resmi Google GenAI
+client = genai.Client(api_key=api_key)
 
 prompt = """
 Kamu adalah seorang guru Matematika dan Informatika di MTs (setingkat SMP) yang sangat kreatif, ramah, dan asyik.
@@ -22,18 +22,13 @@ Sertakan juga 1 pertanyaan latihan seru di akhir materi.
 """
 
 try:
-    # Menggunakan model llama-3.1-8b-instant yang kompatibel dan terbuka untuk akun gratis
-    completion = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "system", "content": "Kamu adalah asisten kurikulum guru yang kreatif."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.8,
-        max_tokens=1500
+    # Menggunakan model Gemini paling stabil saat ini
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
     )
     
-    ai_content = completion.choices[0].message.content
+    ai_content = response.text
     
     today = datetime.now().strftime("%Y-%m-%d")
     filename = f"materi_{today}.md"
@@ -45,5 +40,5 @@ try:
     print(f"Berhasil membuat materi: {filename}")
 
 except Exception as e:
-    print(f"GAGAL terhubung ke Groq:", str(e))
+    print(f"GAGAL terhubung ke Gemini API:", str(e))
     sys.exit(1)
